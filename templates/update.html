@@ -17,7 +17,8 @@
 table-bordered table-striped">
 {% for our_user in our_users %}
     <tr>
-    <td>{{ our_user.id }}. {{our_user.name }} - {{
+    <td>{{ our_users.id }}.<a href="{{ url_for('update', id=our_users.id)}}"> {{our_user.name }}</a>
+     - {{
     our_user.email }}
     </td> <br/>
     </tr>
@@ -59,9 +60,8 @@ table-bordered table-striped">
 <table class="table table-hover table-bordered table-striped">
 {% for our_user in our_users %}
     <tr>
-    <td>{{ our_users.id }}. 
-         
-    {{our_users.name }} - {{
+    <td>{{ our_users.id }}. <a href="{{ url_for('update', id=our_users.id)}}">
+    {{our_users.name }}</a> - {{
     our_users.email }} - {{ our_users.favorite_color }}
     </td> <br/>
 {% endfor %}

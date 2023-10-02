@@ -3,9 +3,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
-
-from flask_migrate import Migrate
 from datetime import datetime
+from flask_migrate import Migrate
+
 
 app = Flask(__name__)
 # add datebase
@@ -32,6 +32,26 @@ class Users(db.Model):
     def __init__(self, name, email):
         self.name = name
         self.email = email
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    user_to_delete =  Users.query.get_or_404(id)
+    name = None
+    form = UserForm()
+    try:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        flash("User deleted successfully!!")
+        our_users= Users.query.order_by(Users.date_added)
+        
+        return render_template("add_user.html",
+        form=form,
+        name=name,
+        our_users=our_users)
+    except:
+        flash("Whoops! Try again..")
+        return render_template("add_user.html",form=form,name=name,
+        our_users=our_users)
 
 class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
@@ -92,6 +112,9 @@ def add_user():
         form.favorite_color.data = ''
         flash("User added seccessfully")
     our_users= Users.query.order_by(Users.date_added)
+    print('abcd--------------------------------------------')
+    print(our_users)
+    
     return render_template("add_user.html",
     form=form,
     name=name,
